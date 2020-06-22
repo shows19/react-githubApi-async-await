@@ -1,0 +1,38 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy to Surge on Push
+
+# Controls when the action will run. Triggers the workflow on push 
+on: push
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "deploy-surge"
+  deploy-surge:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+    - name: Install Node.js v12
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: '12'
+
+    - name: install yarn
+      uses: borales/actions-yarn@v2.0.0
+      with:
+          cmd: install # will run `yarn install` command
+
+    - name: Build React App
+      run: yarn build
+
+	# Runs command using the runners shell
+    - name: install surge
+      run: npm install -g surge
+    
+  # Deploy to surge using auth token saved in settings -> secrets
+    - name: deploy to surge
+      run: surge ./build react_githubApi_slucky.surge.sh --token ${{ secrets.SURGE_TOKEN }}
