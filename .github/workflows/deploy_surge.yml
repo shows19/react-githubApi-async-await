@@ -29,10 +29,10 @@ jobs:
     - name: Build React App
       run: yarn build
 
-	# Runs command using the runners shell
+    # Runs command using the runners shell
     - name: install surge
       run: npm install -g surge
     
-  # Deploy to surge using auth token saved in settings -> secrets
+    # Deploy to surge using auth token saved in settings -> secrets
     - name: deploy to surge
       run: surge ./build react_githubApi_slucky.surge.sh --token ${{ secrets.SURGE_TOKEN }}
